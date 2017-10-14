@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<!--
+	Strata by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+
+    Notes:
+    For popup/Modal boxes go to https://www.w3schools.com/howto/howto_css_modals.asp
+-->
+<html>
+	<head>
+		<title>Bowen Yang</title>
+    </head>
+    <body>
+        <h2 id="eyetext" style="font-size:200px;">C</h2>
+        
+        <script src="./annyang.js"></script>
+<script src="./speechkitt.min.js"></script>
+
+<script>
+var level = 0;
+var levelFont = ["200px","160px","125px","100px","80px","63px","50px","32px","25px","20px","16px","12.5px","10px"];
+var allLetter = ["C", "D", "E", "F", "N", "O", "P", "T", "Z"];
+var scores = ["20/200","20/100","20/80","20/63","20/50","20/40","20/32","20/25","20/20","20/16"]
+var letterNum = 0;
+var wrongCount = 0;
+var newLetter;
+document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
+
+if (annyang) {
+  // Add our commands to annyang
+  annyang.addCommands({
+    'A': function(){ putInLetter("A")},
+    'B': function(){ putInLetter("B")},
+    'C': function(){ putInLetter("C")},
+    'D': function(){ putInLetter("D")},
+    'E': function(){ putInLetter("E")},
+    'F': function(){ putInLetter("F")},
+    'G': function(){ putInLetter("G")},
+    'H': function(){ putInLetter("H")},
+    'I': function(){ putInLetter("I")},
+    'J': function(){ putInLetter("J")},
+    'K': function(){ putInLetter("K")},
+    'L': function(){ putInLetter("L")},
+    'M': function(){ putInLetter("M")},
+    'N': function(){ putInLetter("N")},
+    'O': function(){ putInLetter("O")},
+    'P': function(){ putInLetter("P")},
+    'Q': function(){ putInLetter("Q")},
+    'R': function(){ putInLetter("R")},
+    'S': function(){ putInLetter("S")},
+    'T': function(){ putInLetter("T")},
+    'U': function(){ putInLetter("U")},
+    'V': function(){ putInLetter("V")},
+    'W': function(){ putInLetter("W")},
+    'X': function(){ putInLetter("X")},
+    'Y': function(){ putInLetter("Y")},
+    'Z': function(){ putInLetter("Z")}
+  });
+
+  // Tell KITT to use annyang
+  SpeechKITT.annyang();
+
+  // Define a stylesheet for KITT to use
+  SpeechKITT.setStylesheet('./themes/flat.css');
+
+  // Render KITT's interface
+  SpeechKITT.vroom();
+}
+function putInLetter(inputLetter){
+    if(inputLetter == document.getElementById("eyetext").innerHTML.toUpperCase()){
+        wrongCount=0;
+    }else{
+        wrongCount+=1;
+    }
+    letterNum +=1;
+    newLetter = allLetter[Math.floor(Math.random()*allLetter.length)];
+    while(newLetter==document.getElementById("eyetext").innerHTML){
+        newLetter = allLetter[Math.floor(Math.random()*allLetter.length)];
+    }
+    document.getElementById("eyetext").innerHTML = newLetter;
+    if (letterNum>level){
+        level+=1;
+        letterNum =0;
+        wrongCount=0;
+        document.getElementById("eyetext").style = "font-size:" + levelFont[level] + ";";
+    }
+    if(wrongCount>=2){
+        document.getElementById("eyetext").innerHTML = "Your eyesight is : " + scores[level];
+        document.getElementById("eyetext").style = "font-size:50px;";
+    }
+}
+</script>
+
+	</body>
+</html>
