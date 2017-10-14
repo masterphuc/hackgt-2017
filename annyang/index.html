@@ -12,7 +12,9 @@
 		<title>Bowen Yang</title>
     </head>
     <body>
-        <h2 id="eyetext" style="font-size:200px;">C</h2>
+        <div style="text-align:center;vertical-align:middle;line-height:500px;">
+        <h2 id="eyetext" style="font-size:200px;"></h2>
+            </div>
         
         <script src="./annyang.js"></script>
 <script src="./speechkitt.min.js"></script>
@@ -25,37 +27,38 @@ var scores = ["20/200","20/100","20/80","20/63","20/50","20/40","20/32","20/25",
 var letterNum = 0;
 var wrongCount = 0;
 var newLetter;
-document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
+document.getElementById("eyetext").innerHTML = "Click on the Mic icon to start";
+document.getElementById("eyetext").style = "font-size:60px;"
 
 if (annyang) {
   // Add our commands to annyang
   annyang.addCommands({
-    'A': function(){ putInLetter("A")},
-    'B': function(){ putInLetter("B")},
-    'C': function(){ putInLetter("C")},
-    'D': function(){ putInLetter("D")},
-    'E': function(){ putInLetter("E")},
-    'F': function(){ putInLetter("F")},
-    'G': function(){ putInLetter("G")},
-    'H': function(){ putInLetter("H")},
-    'I': function(){ putInLetter("I")},
-    'J': function(){ putInLetter("J")},
-    'K': function(){ putInLetter("K")},
-    'L': function(){ putInLetter("L")},
-    'M': function(){ putInLetter("M")},
-    'N': function(){ putInLetter("N")},
-    'O': function(){ putInLetter("O")},
-    'P': function(){ putInLetter("P")},
-    'Q': function(){ putInLetter("Q")},
-    'R': function(){ putInLetter("R")},
-    'S': function(){ putInLetter("S")},
-    'T': function(){ putInLetter("T")},
-    'U': function(){ putInLetter("U")},
-    'V': function(){ putInLetter("V")},
-    'W': function(){ putInLetter("W")},
-    'X': function(){ putInLetter("X")},
-    'Y': function(){ putInLetter("Y")},
-    'Z': function(){ putInLetter("Z")}
+    'letter a': function(){ putInLetter("A")},
+    'letter b': function(){ putInLetter("B")},
+    'letter c': function(){ putInLetter("C")},
+    'letter d': function(){ putInLetter("D")},
+    'letter e': function(){ putInLetter("E")},
+    'letter f': function(){ putInLetter("F")},
+    'letter g': function(){ putInLetter("G")},
+    'letter h': function(){ putInLetter("H")},
+    'letter i': function(){ putInLetter("I")},
+    'letter j': function(){ putInLetter("J")},
+    'letter k': function(){ putInLetter("K")},
+    'letter l': function(){ putInLetter("L")},
+    'letter m': function(){ putInLetter("M")},
+    'letter n': function(){ putInLetter("N")},
+    'letter o': function(){ putInLetter("O")},
+    'letter p': function(){ putInLetter("P")},
+    'letter q': function(){ putInLetter("Q")},
+    'letter r': function(){ putInLetter("R")},
+    'letter s': function(){ putInLetter("S")},
+    'letter t': function(){ putInLetter("T")},
+    'letter u': function(){ putInLetter("U")},
+    'letter v': function(){ putInLetter("V")},
+    'letter w': function(){ putInLetter("W")},
+    'letter x': function(){ putInLetter("X")},
+    'letter y': function(){ putInLetter("Y")},
+    'letter z': function(){ putInLetter("Z")}
   });
 
   // Tell KITT to use annyang
@@ -63,7 +66,10 @@ if (annyang) {
 
   // Define a stylesheet for KITT to use
   SpeechKITT.setStylesheet('./themes/flat.css');
-
+    setTimeout(function(){document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";},1000)
+SpeechKITT.setStartCommand(function(){annyang.start(); var letterNum = 0; var wrongCount = 0;var level = 0;document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)]; 
+        document.getElementById("eyetext").style = "font-size:" + levelFont[level] + ";";});
+    //document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";
   // Render KITT's interface
   SpeechKITT.vroom();
 }
@@ -88,8 +94,14 @@ function putInLetter(inputLetter){
     if(wrongCount>=2){
         document.getElementById("eyetext").innerHTML = "Your eyesight is : " + scores[level];
         document.getElementById("eyetext").style = "font-size:50px;";
+        document.getElementById("skitt-ui").className = "skitt-ui--not-listening";
     }
+    
 }
+/*if(document.getElementById("eyetext").innerHTML.length > 5 && document.getElementById("skitt-ui".className == "skitt-ui--listening")){
+        document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
+}*/
+    
 </script>
 
 	</body>
