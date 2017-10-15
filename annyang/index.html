@@ -48,7 +48,7 @@
         <div id="cameraAccess" style="visibility: hidden">true</div>
         
     <script>
-        var inputDistance = 0;
+        var inputDistance = 2;
         DistanceScale=8.75; // distance between eyes is 70 when it's 20cm away. or 7 when it's 200cm away.
         CurrentDistance=70;
         window.onload = function() {
@@ -89,7 +89,7 @@
 
         };
         
-var level = 0;
+var level = 5;
 
 var fontScale = [200,160,125,100,80,63,50,32,25,20,16,12.5,10];
 var levelFont = fontScale;
@@ -124,7 +124,7 @@ if (annyang) {
         annyang.start();
         letterNum = 0;
         wrongCount = 0;
-        level = 0;
+        level = 5;
         levelFont=fontScale.map(function (d){
             if(document.getElementById("cameraAccess").innerHTML == "true"){
                 return d*(DistanceScale/CurrentDistance); }
@@ -142,7 +142,8 @@ if (annyang) {
   SpeechKITT.vroom();
 }
 function putInLetter(inputLetter){
-	
+	var finalresult=false;
+    console.log(level);
     if(inputLetter == document.getElementById("eyetext").innerHTML.toUpperCase()){
         wrongCount=0;
     }else{
@@ -154,13 +155,43 @@ function putInLetter(inputLetter){
         newLetter = allLetter[Math.floor(Math.random()*allLetter.length)];
     }
     document.getElementById("eyetext").innerHTML = newLetter;
-    if (letterNum>level){
-        level+=1;
+    
+    if (letterNum>=3){
+        if (level<5) {
+            if (wrongCount>=2) {
+                level-=1;
+            } else {
+                finalresult=true;
+            }
+        } else if (level==5) {
+            if (wrongCount<2) {
+                level+=1;
+            } else {
+                level-=1;
+            }
+        } else {
+            if (wrongCount<2) {
+                level+=1;
+            } else {
+                level-=1;
+                finalresult=true;
+            }
+        }
+        
+        if (level<0) {
+            level=0;
+            finalresult=true;
+        } 
+        if (level>=scores.length){
+            level=scores.length-1;
+            finalresult=true;
+        }
+        
         letterNum =0;
         wrongCount=0;
         document.getElementById("eyetext").style = "font-size:" + levelFont[level] + "px;";
     }
-    if(wrongCount>=2){
+    if(finalresult){
         document.getElementById("eyetext").innerHTML = "Your eyesight is : " + scores[level];
         document.getElementById("eyetext").style = "font-size:50px;";
         document.getElementById("skitt-ui").className = "skitt-ui--not-listening";
