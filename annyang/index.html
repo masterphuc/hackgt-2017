@@ -122,9 +122,9 @@ if (annyang) {
 
     SpeechKITT.setStartCommand(function(){
         annyang.start();
-        var letterNum = 0;
-        var wrongCount = 0;
-        var level = 0;
+        letterNum = 0;
+        wrongCount = 0;
+        level = 0;
         levelFont=fontScale.map(function (d){
             if(document.getElementById("cameraAccess").innerHTML == "true"){
                 return d*(DistanceScale/CurrentDistance); }
