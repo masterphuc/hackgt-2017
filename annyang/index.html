@@ -30,7 +30,7 @@
         </style>
 
     </head>
-    <body>
+    <body style="overflow:hidden;">
     <div class="demo-frame">
         <div class="demo-container">
             <video id="video" width="320" height="240" preload autoplay loop muted style="visibility:hidden"></video>
@@ -113,31 +113,34 @@ if (annyang) {
       
   });
 
-  // Tell KITT to use annyang
-  SpeechKITT.annyang();
+ 		// Tell KITT to use annyang
+  	SpeechKITT.annyang();
 
-  // Define a stylesheet for KITT to use
-  SpeechKITT.setStylesheet('./themes/flat.css');
-    setTimeout(function(){document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";},1000);
+  	// Define a stylesheet for KITT to use
+	  SpeechKITT.setStylesheet('./themes/flat.css');
+  	
+  	SpeechKITT.setInstructionsText('Test starting');
+
 
     SpeechKITT.setStartCommand(function(){
-        annyang.start();
-        letterNum = 0;
-        wrongCount = 0;
-        level = 5;
-        levelFont=fontScale.map(function (d){
-            if(document.getElementById("cameraAccess").innerHTML == "true"){
-                return d*(DistanceScale/CurrentDistance); }
-            else{
-                return d*inputDistance/2;
-            }
-            ///scale the level font size when clicking the button. TODO: Prompt user to cover one eye after it starts.
+        setTimeout(function(){
+        	annyang.start();
+	        letterNum = 0;
+	        wrongCount = 0;
+	        level = 5;
+	        levelFont=fontScale.map(function (d){
+	            if(document.getElementById("cameraAccess").innerHTML == "true"){
+	                return d*(DistanceScale/CurrentDistance); }
+	            else{
+	                return d*inputDistance/2;
+	            }
+	        })
+		      document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
+	        document.getElementById("eyetext").style = "font-size:" + levelFont[level] + "px;";  
+        	},2000);
+				document.getElementById("eyetext").innerHTML = "Cover One Eye Please.";
         });
 
-        document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
-        document.getElementById("eyetext").style = "font-size:" + levelFont[level] + "px;";});
-
-    //document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";
   // Render KITT's interface
   SpeechKITT.vroom();
 }
