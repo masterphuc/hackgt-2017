@@ -37,27 +37,34 @@
             <canvas id="canvas" width="320" height="240"></canvas>
         </div>
     </div>
-
-        <div style="text-align:center;vertical-align:middle;line-height:500px;">
-        <h2 id="eyetext" style="font-size:200px;"></h2>
+        <div style="text-align:center;line-height:200px;font-size:30px;">
+<div id="inputNumber" style="visibility:hidden;">
+        Please enter your distance from the camera in meters: <input id="inputNumber1" type="number" name="quantity" onchange="updateDistance()" min="1" max="99">
+        </div>
             </div>
-
-
+        <div style="text-align:center;vertical-align:top;line-height:100px;">
+        <h2 id="eyetext" style="font-size:200px;">dummy text right now</h2>
+            </div>
+        <div id="cameraAccess" style="visibility: hidden">true</div>
+        
     <script>
+        var inputDistance = 0;
         DistanceScale=8.75; // distance between eyes is 70 when it's 20cm away. or 7 when it's 200cm away.
         CurrentDistance=70;
-
         window.onload = function() {
             var video = document.getElementById('video');
             var canvas = document.getElementById('canvas');
             var context = canvas.getContext('2d');
 
-            var tracker = new tracking.LandmarksTracker();
+             tracker = new tracking.LandmarksTracker();
             tracker.setInitialScale(4);
             tracker.setStepSize(2);
             tracker.setEdgesDensity(0.1);
-
-            tracking.track('#video', tracker, { camera: true });
+            try{
+                tracking.track('#video', tracker, { camera: true });
+            }catch(err){
+                console.log(err);
+            }
             tracker.on('track', function(event) {
 
                 context.clearRect(0,0,canvas.width, canvas.height);
@@ -81,11 +88,7 @@
 
 
         };
-    </script>
-
-
-
-<script>
+        
 var level = 0;
 
 var fontScale = [200,160,125,100,80,63,50,32,25,20,16,12.5,10];
@@ -101,32 +104,13 @@ document.getElementById("eyetext").style = "font-size:60px;"
 if (annyang) {
   // Add our commands to annyang
   annyang.addCommands({
-    'letter a': function(){ putInLetter("A")},
-    'letter b': function(){ putInLetter("B")},
-    'letter c': function(){ putInLetter("C")},
-    'letter d': function(){ putInLetter("D")},
-    'letter e': function(){ putInLetter("E")},
-    'letter f': function(){ putInLetter("F")},
-    'letter g': function(){ putInLetter("G")},
-    'letter h': function(){ putInLetter("H")},
-    'letter i': function(){ putInLetter("I")},
-    'letter j': function(){ putInLetter("J")},
-    'letter k': function(){ putInLetter("K")},
-    'letter l': function(){ putInLetter("L")},
-    'letter m': function(){ putInLetter("M")},
-    'letter n': function(){ putInLetter("N")},
-    'letter o': function(){ putInLetter("O")},
-    'letter p': function(){ putInLetter("P")},
-    'letter q': function(){ putInLetter("Q")},
-    'letter r': function(){ putInLetter("R")},
-    'letter s': function(){ putInLetter("S")},
-    'letter t': function(){ putInLetter("T")},
-    'letter u': function(){ putInLetter("U")},
-    'letter v': function(){ putInLetter("V")},
-    'letter w': function(){ putInLetter("W")},
-    'letter x': function(){ putInLetter("X")},
-    'letter y': function(){ putInLetter("Y")},
-    'letter z': function(){ putInLetter("Z")}
+      '*allSpeech':function(allSpeech){
+                letterPhrase=/[lL]etter [A-Za-z]\b/;
+                if (letterPhrase.test(allSpeech)) {
+                    console.log("letter phrase");
+                    putInLetter(allSpeech.substring(allSpeech.indexOf("letter"))[7].toUpperCase());
+                }}
+      
   });
 
   // Tell KITT to use annyang
@@ -134,7 +118,7 @@ if (annyang) {
 
   // Define a stylesheet for KITT to use
   SpeechKITT.setStylesheet('./themes/flat.css');
-    setTimeout(function(){document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";},1000)
+    setTimeout(function(){document.getElementById("skitt-listening-text__instructions").innerHTML = "Test starting";},1000);
 
     SpeechKITT.setStartCommand(function(){
         annyang.start();
@@ -142,7 +126,12 @@ if (annyang) {
         var wrongCount = 0;
         var level = 0;
         levelFont=fontScale.map(function (d){
-            return d*(DistanceScale/CurrentDistance); ///scale the level font size when clicking the button. TODO: Prompt user to cover one eye after it starts.
+            if(document.getElementById("cameraAccess").innerHTML == "true"){
+                return d*(DistanceScale/CurrentDistance); }
+            else{
+                return d*inputDistance/2;
+            }
+            ///scale the level font size when clicking the button. TODO: Prompt user to cover one eye after it starts.
         });
 
         document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
@@ -178,10 +167,10 @@ function putInLetter(inputLetter){
     }
     
 }
-/*if(document.getElementById("eyetext").innerHTML.length > 5 && document.getElementById("skitt-ui".className == "skitt-ui--listening")){
-        document.getElementById("eyetext").innerHTML = allLetter[Math.floor(Math.random()*allLetter.length)];
-}*/
-    
+function updateDistance(){
+    inputDistance = document.getElementById("inputNumber1").value;
+    //console.log(document.getElementById("inputNumber1").value);
+}
 </script>
 
 	</body>

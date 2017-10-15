@@ -68,6 +68,8 @@
     }).then(function(stream) {
       element.srcObject = stream;
     }).catch(function(err) {
+        document.getElementById("cameraAccess").innerHTML = "false";
+        document.getElementById("inputNumber").style = "visibility:visible;";
       throw Error('Cannot capture user camera.');
     });
   };
